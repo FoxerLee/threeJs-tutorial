@@ -2,18 +2,17 @@ import * as THREE from 'three'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
-import { NURBSCurve } from 'three/examples/jsm/curves/NURBSCurve';
-import { NURBSSurface } from 'three/examples/jsm/curves/NURBSSurface';
-import { ParametricGeometry } from 'three/examples/jsm/geometries/ParametricGeometry';
 import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter';
 
 import { GUI } from 'dat.gui';
 
+import { getSpeechResult } from './openapi-api.js';
+
+import { recordDef } from './record.js';
+
 let camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
 let scene = new THREE.Scene();
 let renderer = new THREE.WebGLRenderer({ antialias: true });
-let stats;
-// let sphere, material;
 const params = {
     exportToObj: exportToObj
 };
@@ -28,12 +27,8 @@ let cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
 
 let controls = new OrbitControls(camera, renderer.domElement);
 
-// init();
-
 function init() {
 
-
-    // renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setAnimationLoop(animation);
@@ -43,13 +38,8 @@ function init() {
 
     window.addEventListener('resize', onWindowResized);
 
-    // stats = new Stats();
-    // document.body.appendChild(stats.dom);
-
-    // camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
     camera.position.z = 75;
 
-    // scene = new THREE.Scene();
     scene.rotation.y = 0.5; // avoid flying objects occluding the sun
 
     new RGBELoader()
@@ -63,36 +53,9 @@ function init() {
 
         });
 
-    //
-
-    // cubeRenderTarget = new THREE.WebGLCubeRenderTarget(256);
-    // cubeRenderTarget.texture.type = THREE.HalfFloatType;
-
-    // cubeCamera = new THREE.CubeCamera(1, 1000, cubeRenderTarget);
-
-    /* SPHERE TEST */
-
-    // material = new THREE.MeshStandardMaterial({
-    //     envMap: cubeRenderTarget.texture,
-    //     roughness: 0.05,
-    //     metalness: 1
-    // });
-
-    // const gui = new GUI();
-    // gui.add(material, 'roughness', 0, 1);
-    // gui.add(material, 'metalness', 0, 1);
-    // gui.add(renderer, 'toneMappingExposure', 0, 2).name('exposure');
-
-    // sphere = new THREE.Mesh(new THREE.IcosahedronGeometry(15, 8), material);
-    // scene.add(sphere);
-
     /* GUI */
     const gui = new GUI();
     gui.add(params, 'exportToObj').name('Export OBJ');
-
-    //
-
-    // controls = new OrbitControls(camera, renderer.domElement);
     controls.autoRotate = false;
 
     /* FLOWER */
@@ -198,13 +161,6 @@ function init() {
 
     // Create the sepal
     const sepalShape = new THREE.Shape();
-    // sepalShape.moveTo(0, 0);
-    // sepalShape.lineTo(1, 2);
-    // sepalShape.lineTo(2, 2);
-    // sepalShape.lineTo(3, 0);
-    // sepalShape.lineTo(2, -2);
-    // sepalShape.lineTo(1, -2);
-    // sepalShape.lineTo(0, 0);
     // Define the curves
     const sepalCurve1 = new THREE.CubicBezierCurve(
         new THREE.Vector2(0, 0),
@@ -354,17 +310,17 @@ function init() {
     scene.add(stamenGroup);
 
 }
-//////////////////////////////////////////////////////////////
+
 const link = document.createElement('a');
 link.style.display = 'none';
 document.body.appendChild(link);
 
-function save(blob: Blob | MediaSource, filename: string) {
+function save(blob, filename) {
     link.href = URL.createObjectURL(blob);
     link.download = filename;
     link.click();
 }
-function saveString(text: BlobPart, filename: string) {
+function saveString(text, filename) {
     save(new Blob([text], { type: 'text/plain' }), filename);
 }
 function exportToObj() {
@@ -372,7 +328,6 @@ function exportToObj() {
     const result = exporter.parse(scene);
     saveString(result, 'object.obj');
 }
-//////////////////////////////////////////////////////////////
 
 function onWindowResized() {
 
@@ -383,9 +338,9 @@ function onWindowResized() {
 
 }
 
-init();
 
-function animation(msTime: number) {
+
+function animation(msTime) {
 
     const time = msTime / 1000;
 
@@ -398,7 +353,6 @@ function animation(msTime: number) {
     let rotx = parseFloat(document.getElementById("remote").innerHTML);
     rotx = Math.min(Math.max(rotx, 0), 1);
 
-    // rotx = 2 + rotx * (20-2);
 
     if (!isNaN(rotx)) {
         for (const group of scene.children) {
@@ -433,7 +387,6 @@ function animation(msTime: number) {
         for (const group of scene.children) {
             if (group.name != "pistil") continue;
             if (group.name == "pistil") {
-                // console.log(group);
                 group.scale.set(0.5 + rotx / 2, 0.5 + rotx / 2, 0.5 + rotx / 2); //0->0.5, 1->1
             }
         }
@@ -452,10 +405,9 @@ function animation(msTime: number) {
             }
         }
 
-
-        // console.log(scene.children);
-
-        // stats.update();
-
     }
 }
+
+init();
+getSpeechResult();
+recordDef();
