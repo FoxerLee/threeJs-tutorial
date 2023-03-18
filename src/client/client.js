@@ -5,9 +5,6 @@ import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader';
 import { OBJExporter } from 'three/examples/jsm/exporters/OBJExporter';
 
 import { GUI } from 'dat.gui';
-
-import { getSpeechResult } from './openapi-api.js';
-
 import { recordDef } from './record.js';
 
 let camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 1000);
@@ -409,5 +406,4 @@ function animation(msTime) {
 }
 
 init();
-getSpeechResult();
 recordDef();

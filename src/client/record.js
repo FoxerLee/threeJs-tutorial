@@ -1,18 +1,14 @@
-const { Configuration, OpenAIApi } = require("openai");
-
-const configuration = new Configuration({
-  apiKey: "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",
-});
+const FormData = require("form-data");
+const axios = require("axios");
+const openaiApi = require("./openai-api.js");
 
 export const recordDef = () => {
 
   let audioChunks = [];
   let rec;
-  const openai = new OpenAIApi(configuration);
 
   navigator.mediaDevices.getUserMedia({audio:true})
       .then(stream => {handlerFunction(stream)})
-
 
             function handlerFunction(stream) {
             rec = new MediaRecorder(stream);
@@ -23,17 +19,11 @@ export const recordDef = () => {
                 recordedAudio.src = URL.createObjectURL(blob);
                 recordedAudio.controls=true;
                 recordedAudio.autoplay=true;
-                sendData(blob);
+                openaiApi.openAiTranscription(blob);
               }
             }
           }
-        async function sendData(data) {
-          console.log(data);
-          const resp = await openai.createTranscription(
-              data,
-              "whisper-1"
-          );
-        }
+      
 
         record.onclick = e => {
           console.log('I was clicked')
