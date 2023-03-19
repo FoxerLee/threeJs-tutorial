@@ -27,11 +27,11 @@ let controls = new OrbitControls(camera, renderer.domElement);
 function init() {
 
     renderer.setPixelRatio(window.devicePixelRatio);
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth/2, window.innerHeight/2);
     renderer.setAnimationLoop(animation);
     renderer.outputEncoding = THREE.sRGBEncoding;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    document.body.appendChild(renderer.domElement);
+    document.getElementById("remote").appendChild(renderer.domElement);
 
     window.addEventListener('resize', onWindowResized);
 
@@ -186,6 +186,7 @@ function init() {
         new THREE.Vector2(1, -2),
         new THREE.Vector2(1.2, -4)
     );
+
     // Add the curves to the shape
     sepalShape.curves.push(sepalCurve1, sepalCurve2, sepalCurve3, sepalCurve4);
     const sepalGeometry = new THREE.ExtrudeGeometry(sepalShape, { depth: 0.5, bevelEnabled: false });

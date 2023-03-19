@@ -3,31 +3,38 @@
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Three.js TypeScript Tutorials by Sean Bradley : https://sbcode.net/threejs</title>
-        <style>
-            body {
-                overflow: hidden;
-                margin: 0px;
-            }
-        </style>
+        <title>openai chat demo</title>
+        <link href="./css/bootstrap.min.css" rel="stylesheet">
+        <link href="./css/custom.css" rel="stylesheet">
     </head>
 
     <body>
-        <div style="position: relative; display: inline-block;">
-            <p id="local" hidden="true">a</p>
-            <p id="remote" >remote data:</p>
-            <p id="speechResult">speech result:</p>
-            
+        <div class="container">
+            <h1>OpenAI demo</h1>
+            <h2>Step1: Record</h2>
+            <p>Please use below buttons to record your message.</p>
+            <div>
+                <button type="button" id=record class="btn btn-primary">Record</button>
+                <button type="button" id=stopRecord disabled class="btn btn-danger">Stop</button>
+            </div>
+            <br>
+            <div class="mb-3">
+                <audio id=recordedAudio></audio>
+            </div>
+            <div class="mb-3">
+                <label for="record-message-label" class="form-label">Recorded message</label>
+                <textarea class="form-control" id="record-message" rows="3"></textarea>
+            </div>
+            <h2>Step2: Show result</h2>
+            <p>OpenAI will respond based on your message.</p>
+            <div class="mb-3">
+                <label for="respond-message-label" class="form-label">Respond message</label>
+                <textarea class="form-control" id="respond-message" rows="3"></textarea>
+            </div>
+            <div class="threejs-place">
+                <p id="remote"></p>
+            </div>
         </div>
-        <h2>Record</h2>
-        <p>
-            <button id=record>Record</button>
-            <button id=stopRecord disabled>Stop</button>
-        </p>
-        <p>
-            <audio id=recordedAudio></audio>
-    
-        </p>
-        <script type="module" src="bundle.js"></script>
     </body>
+    <script type="module" src="bundle.js"></script>
 </html>

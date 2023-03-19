@@ -10,7 +10,7 @@ export const recordDef = () => {
   navigator.mediaDevices.getUserMedia({audio:true})
       .then(stream => {handlerFunction(stream)})
 
-            function handlerFunction(stream) {
+        function handlerFunction(stream) {
             rec = new MediaRecorder(stream);
             rec.ondataavailable = e => {
               audioChunks.push(e.data);
@@ -24,20 +24,16 @@ export const recordDef = () => {
             }
           }
       
-
         record.onclick = e => {
-          console.log('I was clicked')
           record.disabled = true;
-          record.style.backgroundColor = "blue"
           stopRecord.disabled=false;
           audioChunks = [];
           rec.start();
         }
+
         stopRecord.onclick = e => {
-          console.log("I was clicked")
           record.disabled = false;
           stop.disabled=true;
-          record.style.backgroundColor = "red"
           rec.stop();
         }
 
